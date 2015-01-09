@@ -3,8 +3,12 @@
 namespace Contactzilla\OAuth2\Client\Provider;
 
 use Contactzilla\OAuth2\Client\Entity\Company;
+use Guzzle\Http\Exception\BadResponseException;
+use League\OAuth2\Client\Exception\IDPException;
+use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Token\AccessToken;
 
-class Freeagent extends AbstractProvider
+class FreeAgent extends AbstractProvider
 {
     public $scopes = [];
     public $responseType = 'string';
@@ -19,12 +23,12 @@ class Freeagent extends AbstractProvider
         return 'https://api.sandbox.freeagent.com/v2/token_endpoint';
     }
 
-    public function urlUserDetails(\League\OAuth2\Client\Token\AccessToken $token = null)
+    public function urlUserDetails(AccessToken $token = null)
     {
         return 'https://api.sandbox.freeagent.com/v2/company';
     }
 
-    public function userDetails($response, \League\OAuth2\Client\Token\AccessToken $token)
+    public function userDetails($response, AccessToken $token)
     {
         $response = (array)($response->company);
         $user = new Company($response);
@@ -32,14 +36,14 @@ class Freeagent extends AbstractProvider
         return $user;
     }
 
-    protected function fetchUserDetails(\League\OAuth2\Client\Token\AccessToken $token)
+    protected function fetchUserDetails(AccessToken $token)
     {
         $url = $this->urlUserDetails();
 
         return $this->fetchProviderData($url, $token);
     }
 
-    protected function fetchProviderData($url, \League\OAuth2\Client\Token\AccessToken $token = null)
+    protected function fetchProviderData($url, AccessToken $token = null)
     {
         try {
             $client = $this->getHttpClient();
