@@ -33,11 +33,6 @@ class FreeAgent extends AbstractProvider
         return $this->baseURL.'token_endpoint';
     }
 
-    public function urlContacts()
-    {
-        return $this->baseURL.'contacts';
-    }
-
     public function urlUserDetails(AccessToken $token = null)
     {
         return $this->baseURL.'company';
@@ -58,22 +53,61 @@ class FreeAgent extends AbstractProvider
         return $this->fetchProviderData($url, $token);
     }
 
-    protected function fetchProviderData($url, AccessToken $token = null)
+    /**
+     * Create contact
+     *
+     * @param array $params
+     * @return Contact
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function createContact($params)
+    {
+        $url = $this->urlContacts();
+
+        $data = ['contact' => $params];
+        return $response = $this->saveProviderData($url, $data);
+
+        //return $this->contactDetails(json_decode($response));
+        return $params;
+    }
+
+    protected function urlContacts()
+    {
+        return $this->baseURL.'contacts';
+    }
+
+    protected function contactDetails($response)
+    {
+        $response = (array)($response->contact);
+        $user = new Contact($response);
+
+        return $user;
+    }
+
+    /**
+     * (POST)
+     *
+     * @param $url
+     * @param array $data
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    protected function saveProviderData($url, $data)
     {
         try {
             $client = $this->getHttpClient();
-            $client->setBaseUrl($url);
-
-            if (isset($token)) {
-                $this->headers = ['Authorization' => 'Bearer ' . $token];
-            }
+            //$client->setBaseUrl($url);
 
             if ($this->headers) {
                 $client->setDefaultOption('headers', $this->headers);
             }
 
-            $request = $client->get()->send();
-            $response = $request->getBody();
+            $request = $client->post($url, ['content-type' => 'application/json']);
+            $request->setBody(json_encode($data));
+            $response = $request->send();
         } catch (BadResponseException $e) {
             // @codeCoverageIgnoreStart
             $raw_response = explode("\n", $e->getResponse());
