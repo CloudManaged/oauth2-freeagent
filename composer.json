@@ -1,0 +1,42 @@
+{
+    "name": "contactzilla/oauth2-freeagent",
+    "description": "A FreeAgent provider for league/oauth2-client",
+    "version": "0.1.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Israel Sotomayor",
+            "email": "israel@contactzilla.com",
+            "homepage": "http://contactzilla.com",
+            "role": "Developer"
+        }
+    ],
+    "keywords": [
+        "oauth",
+        "oauth2",
+        "client",
+        "authorization",
+        "authentication",
+        "idp",
+        "identity",
+        "sso",
+        "single sign on",
+        "freeagent"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Contactzilla\\OAuth2\\Client\\": "src/"
+        }
+    },
+    "require": {
+        "php": "~5.5.0",
+        "league/oauth2-client": "dev-master"
+    },
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "git@github.com:CloudManaged/oauth2-client.git"
+      }
+    ],
+    "minimum-stability": "stable"
+}
