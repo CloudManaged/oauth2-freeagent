@@ -13,19 +13,34 @@ class FreeAgent extends AbstractProvider
     public $scopes = [];
     public $responseType = 'string';
 
+    private $baseURL = 'https://api.freeagent.com/v2/';
+
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
+        if (isset($options['sandbox']) && $options['sandbox']) {
+            $this->baseURL = 'https://api.sandbox.freeagent.com/v2/';
+        }
+    }
+
     public function urlAuthorize()
     {
-        return 'https://api.sandbox.freeagent.com/v2/approve_app';
+        return $this->baseURL.'approve_app';
     }
 
     public function urlAccessToken()
     {
-        return 'https://api.sandbox.freeagent.com/v2/token_endpoint';
+        return $this->baseURL.'token_endpoint';
+    }
+
+    public function urlContacts()
+    {
+        return $this->baseURL.'contacts';
     }
 
     public function urlUserDetails(AccessToken $token = null)
     {
-        return 'https://api.sandbox.freeagent.com/v2/company';
+        return $this->baseURL.'company';
     }
 
     public function userDetails($response, AccessToken $token)
