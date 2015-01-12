@@ -46,9 +46,9 @@ class FreeAgent extends AbstractProvider
     public function userDetails($response, AccessToken $token)
     {
         $response = (array)($response->company);
-        $user = new Company($response);
+        $company = new Company($response);
 
-        return $user;
+        return $company;
     }
 
     protected function fetchUserDetails(AccessToken $token)
