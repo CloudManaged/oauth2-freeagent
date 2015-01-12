@@ -25,22 +25,22 @@ class FreeAgent extends AbstractProvider
 
     public function urlAuthorize()
     {
-        return $this->baseURL.'approve_app';
+        return $this->baseURL . 'approve_app';
     }
 
     public function urlAccessToken()
     {
-        return $this->baseURL.'token_endpoint';
-    }
-
-    public function urlContacts()
-    {
-        return $this->baseURL.'contacts';
+        return $this->baseURL . 'token_endpoint';
     }
 
     public function urlUserDetails(AccessToken $token = null)
     {
-        return $this->baseURL.'company';
+        return $this->baseURL . 'company';
+    }
+
+    protected function urlContacts()
+    {
+        return $this->baseURL . 'contacts';
     }
 
     public function userDetails($response, AccessToken $token)
@@ -51,29 +51,109 @@ class FreeAgent extends AbstractProvider
         return $company;
     }
 
+    protected function contactDetails($response)
+    {
+        $response = (array)($response->contact);
+        $contact = new Contact($response);
+
+        return $contact;
+    }
+
+    /**
+     * Create contact
+     *
+     * @param $params
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function createContact($params)
+    {
+        $url = $this->urlContacts();
+
+        $data = ['contact' => $params];
+        return $this->saveProviderData($url, $data);
+    }
+
+    /**
+     * Update contact
+     *
+     * @param $params
+     * @param null $contactId
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function updateContact($params, $contactId = null)
+    {
+        $url = $this->urlContacts() . '/' . $contactId;
+
+        $data = ['contact' => $params];
+        return $this->updateProviderData($url, $data);
+    }
+
     protected function fetchUserDetails(AccessToken $token)
     {
         $url = $this->urlUserDetails();
-
         return $this->fetchProviderData($url, $token);
     }
 
-    protected function fetchProviderData($url, AccessToken $token = null)
+    /**
+     * (POST) Save data
+     *
+     * @param $url
+     * @param array $data
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    protected function saveProviderData($url, $data)
     {
         try {
             $client = $this->getHttpClient();
-            $client->setBaseUrl($url);
-
-            if (isset($token)) {
-                $this->headers = ['Authorization' => 'Bearer ' . $token];
-            }
 
             if ($this->headers) {
                 $client->setDefaultOption('headers', $this->headers);
             }
 
-            $request = $client->get()->send();
-            $response = $request->getBody();
+            $request = $client->post($url, ['content-type' => 'application/json']);
+            $request->setBody(json_encode($data));
+            $response = $request->send();
+        } catch (BadResponseException $e) {
+            // @codeCoverageIgnoreStart
+            $raw_response = explode("\n", $e->getResponse());
+            throw new IDPException(end($raw_response));
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $response;
+    }
+
+    /**
+     * (PUT) Update data
+     *
+     * @param $url
+     * @param array $data
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    protected function updateProviderData($url, $data)
+    {
+        try {
+            $client = $this->getHttpClient();
+
+            if ($this->headers) {
+                $client->setDefaultOption('headers', $this->headers);
+            }
+
+            $request = $client->put($url, ['content-type' => 'application/json']);
+            $request->setBody(json_encode($data));
+            $response = $request->send();
         } catch (BadResponseException $e) {
             // @codeCoverageIgnoreStart
             $raw_response = explode("\n", $e->getResponse());

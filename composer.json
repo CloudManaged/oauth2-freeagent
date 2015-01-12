@@ -30,13 +30,7 @@
     },
     "require": {
         "php": "~5.5.0",
-        "league/oauth2-client": "dev-master as 0.7.2"
+        "league/oauth2-client": "~0.7"
     },
-    "repositories": [
-      {
-        "type": "vcs",
-        "url": "git@github.com:CloudManaged/oauth2-client.git"
-      }
-    ],
     "minimum-stability": "stable"
 }
