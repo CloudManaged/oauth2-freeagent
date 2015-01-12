@@ -38,9 +38,14 @@ class FreeAgent extends AbstractProvider
         return $this->baseURL . 'company';
     }
 
-    protected function urlContacts()
+    public function urlContacts()
     {
         return $this->baseURL . 'contacts';
+    }
+
+    public function urlInvoices()
+    {
+        return $this->baseURL . 'invoices';
     }
 
     public function userDetails($response, AccessToken $token)
@@ -57,6 +62,23 @@ class FreeAgent extends AbstractProvider
         $contact = new Contact($response);
 
         return $contact;
+    }
+
+    /**
+     * Create invoice
+     *
+     * @param $params
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function createInvoice($params)
+    {
+        $url = $this->urlInvoices();
+
+        $data = ['invoice' => $params];
+        return $this->saveProviderData($url, $data);
     }
 
     /**
