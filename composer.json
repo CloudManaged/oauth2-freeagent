@@ -29,7 +29,7 @@
         }
     },
     "require": {
-        "php": "~5.5.0",
+        "php": ">=5.4.0",
         "league/oauth2-client": "~0.7"
     },
     "minimum-stability": "stable"
