@@ -82,6 +82,42 @@ class FreeAgent extends AbstractProvider
     }
 
     /**
+     * Mark invoice as sent
+     *
+     * @param $invoiceId
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function markInvoiceAsSent($invoiceId)
+    {
+        $url = $this->urlInvoices();
+        $url = $url . '/' . $invoiceId .'/transitions/mark_as_sent';
+
+        return $this->updateProviderData($url, []);
+    }
+
+    /**
+     * Email an invoice
+     *
+     * @param $invoiceId
+     * @param $params
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function emailAnInvoice($invoiceId, $params)
+    {
+        $url = $this->urlInvoices();
+        $url = $url . '/' . $invoiceId .'/send_email';
+
+        $data = ['invoice' => ['email' => $params]];
+        return $this->saveProviderData($url, $data);
+    }
+
+    /**
      * Create contact
      *
      * @param $params
