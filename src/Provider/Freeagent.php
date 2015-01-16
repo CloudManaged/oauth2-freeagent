@@ -48,6 +48,16 @@ class FreeAgent extends AbstractProvider
         return $this->baseURL . 'invoices';
     }
 
+    public function urlBankAccounts()
+    {
+        return $this->baseURL . 'bank_accounts';
+    }
+
+    public function urlBankTransactionExplanation()
+    {
+        return $this->baseURL . 'bank_transaction_explanations';
+    }
+
     public function userDetails($response, AccessToken $token)
     {
         $response = (array)($response->company);
@@ -114,6 +124,23 @@ class FreeAgent extends AbstractProvider
         $url = $url . '/' . $invoiceId .'/send_email';
 
         $data = ['invoice' => ['email' => $params]];
+        return $this->saveProviderData($url, $data);
+    }
+
+    /**
+     * Create a Bank Transaction Explanation
+     *
+     * @param $params
+     * @return \Guzzle\Http\EntityBodyInterface|string
+     * @throws IDPException
+     *
+     * @author Israel Sotomayor <israel@contactzilla.com>
+     */
+    public function createBankTransactionExplanation($params)
+    {
+        $url = $this->urlBankTransactionExplanation();
+
+        $data = ['bank_transaction_explanation' => $params];
         return $this->saveProviderData($url, $data);
     }
 
