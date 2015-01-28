@@ -191,7 +191,7 @@ class FreeAgent extends AbstractProvider
      * @param $url
      * @param array $data
      * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
+     * @throws Exception
      *
      * @author Israel Sotomayor <israel@contactzilla.com>
      */
@@ -208,10 +208,7 @@ class FreeAgent extends AbstractProvider
             $request->setBody(json_encode($data));
             $response = $request->send();
         } catch (BadResponseException $e) {
-            // @codeCoverageIgnoreStart
-            $raw_response = explode("\n", $e->getResponse());
-            throw new IDPException(end($raw_response));
-            // @codeCoverageIgnoreEnd
+            throw new Exception($e->getResponse());
         }
 
         return $response;
@@ -223,7 +220,7 @@ class FreeAgent extends AbstractProvider
      * @param $url
      * @param array $data
      * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
+     * @throws Exception
      *
      * @author Israel Sotomayor <israel@contactzilla.com>
      */
@@ -240,10 +237,7 @@ class FreeAgent extends AbstractProvider
             $request->setBody(json_encode($data));
             $response = $request->send();
         } catch (BadResponseException $e) {
-            // @codeCoverageIgnoreStart
-            $raw_response = explode("\n", $e->getResponse());
-            throw new IDPException(end($raw_response));
-            // @codeCoverageIgnoreEnd
+            throw new Exception($e->getResponse());
         }
 
         return $response;
