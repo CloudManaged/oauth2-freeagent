@@ -1,8 +1,8 @@
 <?php
 
-namespace Contactzilla\OAuth2\Client\Provider;
+namespace CloudManaged\OAuth2\Client\Provider;
 
-use Contactzilla\OAuth2\Client\Entity\Company;
+use CloudManaged\OAuth2\Client\Entity\Company;
 use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Exception\IDPException;
 use League\OAuth2\Client\Provider\AbstractProvider;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Contactzilla\OAuth2\Client\Entity;
+namespace CloudManaged\OAuth2\Client\Entity;
 
 /**
  * Class Company
@@ -22,7 +22,7 @@ namespace Contactzilla\OAuth2\Client\Entity;
  * sales_tax_is_value_added
  * supports_auto_sales_tax_on_purchases
  *
- * @package Contactzilla\OAuth2\Client\Entity
+ * @package CloudManaged\OAuth2\Client\Entity
  * @author Israel Sotomayor <israel@contactzilla.com>
  */
 class Company
