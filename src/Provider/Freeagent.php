@@ -3,17 +3,13 @@
 namespace CloudManaged\OAuth2\Client\Provider;
 
 use CloudManaged\OAuth2\Client\Entity\Company;
-use Guzzle\Http\Exception\BadResponseException;
-use League\OAuth2\Client\Exception\IDPException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 
 class FreeAgent extends AbstractProvider
 {
-    public $scopes = [];
     public $responseType = 'string';
-
-    private $baseURL = 'https://api.freeagent.com/v2/';
+    public $baseURL = 'https://api.freeagent.com/v2/';
 
     public function __construct(array $options = array())
     {
@@ -21,6 +17,11 @@ class FreeAgent extends AbstractProvider
         if (isset($options['sandbox']) && $options['sandbox']) {
             $this->baseURL = 'https://api.sandbox.freeagent.com/v2/';
         }
+    }
+
+    public function urlBase()
+    {
+        return $this->baseURL;
     }
 
     public function urlAuthorize()
