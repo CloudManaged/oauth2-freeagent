@@ -43,3 +43,7 @@ $company = $this->provider->getUserDetails($token);
 // $company->company_registration_number = [ Company Registration Number ]
 
 ```
+
+## Note
+
+If you need a full wrapper to the FreeAgent API we have built this [freeagent-php](https://github.com/CloudManaged/freeagent-php) library with the idea to have access to all the API resources.
