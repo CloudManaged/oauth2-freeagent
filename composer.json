@@ -1,14 +1,12 @@
 {
-    "name": "contactzilla/oauth2-freeagent",
+    "name": "cloudmanaged/oauth2-freeagent",
     "description": "A FreeAgent provider for league/oauth2-client",
     "version": "0.1.0",
     "license": "MIT",
     "authors": [
         {
             "name": "Israel Sotomayor",
-            "email": "israel@contactzilla.com",
-            "homepage": "http://contactzilla.com",
-            "role": "Developer"
+            "email": "israel@contactzilla.com"
         }
     ],
     "keywords": [
@@ -25,7 +23,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Contactzilla\\OAuth2\\Client\\": "src/"
+            "CloudManaged\\OAuth2\\Client\\": "src/"
         }
     },
     "require": {

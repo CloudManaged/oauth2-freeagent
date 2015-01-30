@@ -1,19 +1,15 @@
 <?php
 
-namespace Contactzilla\OAuth2\Client\Provider;
+namespace CloudManaged\OAuth2\Client\Provider;
 
-use Contactzilla\OAuth2\Client\Entity\Company;
-use Guzzle\Http\Exception\BadResponseException;
-use League\OAuth2\Client\Exception\IDPException;
+use CloudManaged\OAuth2\Client\Entity\Company;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 
 class FreeAgent extends AbstractProvider
 {
-    public $scopes = [];
     public $responseType = 'string';
-
-    private $baseURL = 'https://api.freeagent.com/v2/';
+    public $baseURL = 'https://api.freeagent.com/v2/';
 
     public function __construct(array $options = array())
     {
@@ -21,6 +17,11 @@ class FreeAgent extends AbstractProvider
         if (isset($options['sandbox']) && $options['sandbox']) {
             $this->baseURL = 'https://api.sandbox.freeagent.com/v2/';
         }
+    }
+
+    public function urlBase()
+    {
+        return $this->baseURL;
     }
 
     public function urlAuthorize()
@@ -38,208 +39,11 @@ class FreeAgent extends AbstractProvider
         return $this->baseURL . 'company';
     }
 
-    public function urlContacts()
-    {
-        return $this->baseURL . 'contacts';
-    }
-
-    public function urlInvoices()
-    {
-        return $this->baseURL . 'invoices';
-    }
-
-    public function urlBankAccounts()
-    {
-        return $this->baseURL . 'bank_accounts';
-    }
-
-    public function urlBankTransactionExplanation()
-    {
-        return $this->baseURL . 'bank_transaction_explanations';
-    }
-
     public function userDetails($response, AccessToken $token)
     {
         $response = (array)($response->company);
         $company = new Company($response);
 
         return $company;
-    }
-
-    protected function contactDetails($response)
-    {
-        $response = (array)($response->contact);
-        $contact = new Contact($response);
-
-        return $contact;
-    }
-
-    /**
-     * Create invoice
-     *
-     * @param $params
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    public function createInvoice($params)
-    {
-        $url = $this->urlInvoices();
-
-        $data = ['invoice' => $params];
-        return $this->saveProviderData($url, $data);
-    }
-
-    /**
-     * Mark invoice as sent
-     *
-     * @param $invoiceId
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    public function markInvoiceAsSent($invoiceId)
-    {
-        $url = $this->urlInvoices();
-        $url = $url . '/' . $invoiceId .'/transitions/mark_as_sent';
-
-        return $this->updateProviderData($url, []);
-    }
-
-    /**
-     * Email an invoice
-     *
-     * @param $invoiceId
-     * @param $params
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    public function emailAnInvoice($invoiceId, $params)
-    {
-        $url = $this->urlInvoices();
-        $url = $url . '/' . $invoiceId .'/send_email';
-
-        $data = ['invoice' => ['email' => $params]];
-        return $this->saveProviderData($url, $data);
-    }
-
-    /**
-     * Create a Bank Transaction Explanation
-     *
-     * @param $params
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    public function createBankTransactionExplanation($params)
-    {
-        $url = $this->urlBankTransactionExplanation();
-
-        $data = ['bank_transaction_explanation' => $params];
-        return $this->saveProviderData($url, $data);
-    }
-
-    /**
-     * Create contact
-     *
-     * @param $params
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    public function createContact($params)
-    {
-        $url = $this->urlContacts();
-
-        $data = ['contact' => $params];
-        return $this->saveProviderData($url, $data);
-    }
-
-    /**
-     * Update contact
-     *
-     * @param $params
-     * @param null $contactId
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws IDPException
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    public function updateContact($params, $contactId = null)
-    {
-        $url = $this->urlContacts() . '/' . $contactId;
-
-        $data = ['contact' => $params];
-        return $this->updateProviderData($url, $data);
-    }
-
-    protected function fetchUserDetails(AccessToken $token)
-    {
-        $url = $this->urlUserDetails();
-        return $this->fetchProviderData($url, $token);
-    }
-
-    /**
-     * (POST) Save data
-     *
-     * @param $url
-     * @param array $data
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws Exception
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    protected function saveProviderData($url, $data)
-    {
-        try {
-            $client = $this->getHttpClient();
-
-            if ($this->headers) {
-                $client->setDefaultOption('headers', $this->headers);
-            }
-
-            $request = $client->post($url, ['content-type' => 'application/json']);
-            $request->setBody(json_encode($data));
-            $response = $request->send();
-        } catch (BadResponseException $e) {
-            throw new Exception($e->getResponse());
-        }
-
-        return $response;
-    }
-
-    /**
-     * (PUT) Update data
-     *
-     * @param $url
-     * @param array $data
-     * @return \Guzzle\Http\EntityBodyInterface|string
-     * @throws Exception
-     *
-     * @author Israel Sotomayor <israel@contactzilla.com>
-     */
-    protected function updateProviderData($url, $data)
-    {
-        try {
-            $client = $this->getHttpClient();
-
-            if ($this->headers) {
-                $client->setDefaultOption('headers', $this->headers);
-            }
-
-            $request = $client->put($url, ['content-type' => 'application/json']);
-            $request->setBody(json_encode($data));
-            $response = $request->send();
-        } catch (BadResponseException $e) {
-            throw new Exception($e->getResponse());
-        }
-
-        return $response;
     }
 }
