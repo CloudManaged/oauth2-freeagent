@@ -1,7 +1,6 @@
 {
     "name": "cloudmanaged/oauth2-freeagent",
     "description": "A FreeAgent provider for league/oauth2-client",
-    "version": "1.0.0",
     "license": "MIT",
     "authors": [
         {
