@@ -52,7 +52,7 @@ class Company
         $this->type = $attributes['type'];
         $this->currency = $attributes['currency'];
         $this->mileage_units = $attributes['mileage_units'];
-$this->company_start_date = isset($attributes['company_start_date']) ? $attributes['company_start_date'] : null;
+        $this->company_start_date = isset($attributes['company_start_date']) ? $attributes['company_start_date'] : null;
         $this->freeagent_start_date = isset($attributes['freeagent_start_date']) ? $attributes['freeagent_start_date'] : null;
         $this->first_accounting_year_end = isset($attributes['first_accounting_year_end']) ? $attributes['first_accounting_year_end'] : null;
         $this->company_registration_number = isset($attributes['company_registration_number']) ? $attributes['company_registration_number'] : null;
