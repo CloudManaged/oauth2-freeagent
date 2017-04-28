@@ -17,7 +17,7 @@ $provider = new \CloudManaged\OAuth2\Client\Provider\FreeAgent([
     'sandbox' => "TRUE_OR_FALSE",
     'clientId' => "YOUR_CLIENT_ID",
     'clientSecret' => "YOUR_CLIENT_SECRET",
-    'responseType' => "JSON_OR_STRING"
+    'responseType' => "JSON_OR_STRING",
     'redirectUri' => "http://your-redirect-uri"
 ]);
 
