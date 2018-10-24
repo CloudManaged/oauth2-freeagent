@@ -55,7 +55,7 @@ This provider is under the MIT license. See the complete license in the provider
 oAuth2FreeAgent is a [CloudManaged](https://github.com/CloudManaged) initiative.
 See also the list of [contributors](https://github.com/CloudManaged/oauth2-freeagent/graphs/contributors).
 
-## Reporting an issue or a feature request
+## Reporting an issue or a feature request
 
 Issues and feature requests are tracked in the [GitHub issue tracker](https://github.com/CloudManaged/oauth2-freeagent/issues).
 
