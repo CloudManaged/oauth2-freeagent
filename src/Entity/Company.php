@@ -46,22 +46,11 @@ class Company
 
     public function __construct(array $attributes)
     {
-        $this->url = $attributes['url'];
-        $this->name = $attributes['name'];
-        $this->subdomain = $attributes['subdomain'];
-        $this->type = $attributes['type'];
-        $this->currency = $attributes['currency'];
-        $this->mileage_units = $attributes['mileage_units'];
-        $this->company_start_date = isset($attributes['company_start_date']) ? $attributes['company_start_date'] : null;
-        $this->freeagent_start_date = isset($attributes['freeagent_start_date']) ? $attributes['freeagent_start_date'] : null;
-        $this->first_accounting_year_end = isset($attributes['first_accounting_year_end']) ? $attributes['first_accounting_year_end'] : null;
-        $this->company_registration_number = isset($attributes['company_registration_number']) ? $attributes['company_registration_number'] : null;
-        $this->sales_tax_registration_status = isset($attributes['sales_tax_registration_status']) ? $attributes['sales_tax_registration_status'] : null;
-        $this->sales_tax_name = isset($attributes['sales_tax_name']) ? $attributes['sales_tax_name'] : null;
-        $this->sales_tax_registration_number = isset($attributes['sales_tax_registration_number']) ? $attributes['sales_tax_registration_number'] : null;
-        $this->sales_tax_rates = isset($attributes['sales_tax_rates']) ? $attributes['sales_tax_rates'] : null;
-        $this->sales_tax_is_value_added = isset($attributes['sales_tax_is_value_added']) ? $attributes['sales_tax_is_value_added'] : null;
-        $this->supports_auto_sales_tax_on_purchases = isset($attributes['supports_auto_sales_tax_on_purchases']) ? $attributes['supports_auto_sales_tax_on_purchases'] : null;
+        foreach ($attributes as $key => $value) {
+            if (property_exists(__CLASS__, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
 
     public function toArray()
